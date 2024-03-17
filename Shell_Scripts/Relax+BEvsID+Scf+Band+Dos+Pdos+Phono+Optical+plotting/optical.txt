@@ -1,0 +1,15 @@
+Dear Majibul,
+To calculate the absorption spectra of a structure using Quantum Espresso, you have some options.
+The simplest approximation is Independent Particle Approximation (IPA) which allows us to describe single-particle excitations. For this purpose, first, perform a self-consistent field ground-state calculation for your structure using the pw.x code. Next, perform a calculation of the absorption spectrum using the epsilon.x code.
+***************************************
+comands:
+1- pw.x < scf.in > scf.out
+2- epsilon.x < epsilon.in > epsilon.out
+***************************************
+The code epsilon.x produces four files:
+epsr.dat – Real part of the dielectric function
+epsi.dat – Imaginary part of the dielectric function
+eels.dat – Electron energy loss spectrum
+ieps.dat – Response computed on the imaginary axis of frequency
+Finally, you can calculate the absorption spectrum of your structure with the Real and Imaginary parts of the dielectric function.
+There is also another method. The turbo_davidson.x program allows us to calculate the absorption spectra of molecules using time-dependent density functional perturbation theory (TDDFPT). For more information visit the website below. 
