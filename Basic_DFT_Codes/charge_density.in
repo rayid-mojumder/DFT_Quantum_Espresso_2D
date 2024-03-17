@@ -1,0 +1,15 @@
+&inputpp
+ prefix='graphene',
+ outdir='./work/'
+ plot_num=0
+/
+&plot
+ iflag=2
+ output_format=7
+ fileout='charge.xsf'
+ x0 = 0.0, 0.0, 0.0
+ e1 = 2.0, 0.0, 0.0
+ e2 = 0.0, 2.0, 0.0
+ nx = 100
+ ny = 100
+/
