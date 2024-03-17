@@ -1,0 +1,28 @@
+
+     Program POST-PROC v.6.5 starts on 13Apr2020 at 14:57:35 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Serial version
+     Reading header from file  gesic2_cdd.charge
+     Reading data from file  gesic2_cdd.charge
+     Reading data from file  ge33_cdd.charge
+     Reading data from file  sic44_cdd.charge
+
+     Writing data to be plotted to file gesic2_chargediff.cube
+     Plot Type: 3D                     Output format: Gaussian cube
+
+     POST-PROC    :      2.71s CPU      3.42s WALL
+
+
+   This run was terminated on:  14:57:39  13Apr2020            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

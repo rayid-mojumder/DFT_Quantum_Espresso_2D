@@ -1,0 +1,8 @@
+$D_QE/pw.x -i $D_IN/$F_PREFIX.band_nscf.in > $D_OUT/$F_PREFIX.band_nscf.out;
+echo "BAND_NSCF Completed";
+$D_QE/bands.x -i $D_IN/$F_PREFIX.band.in > $D_OUT/$F_PREFIX.band.out;
+echo "BAND Completed";
+$D_QE/pw.x -i $D_IN/$F_PREFIX.band_nscf.in > $D_OUT/$F_PREFIX.band_nscf.out;
+echo "BAND_NSCF Completed";
+$D_QE/bands.x -i $D_IN/$F_PREFIX.band.in > $D_OUT/$F_PREFIX.band.out;
+echo "BAND Completed";

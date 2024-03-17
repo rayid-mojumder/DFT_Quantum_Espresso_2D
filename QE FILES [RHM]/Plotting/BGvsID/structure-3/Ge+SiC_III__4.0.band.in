@@ -1,0 +1,6 @@
+&BANDS
+    outdir  = "/home/nano3/Desktop/RAYID/Ge+SiC/Ge+SiC_III/work/",
+    prefix  = "Ge+SiC_III__4.0",
+    filband = "/home/nano3/Desktop/RAYID/Ge+SiC/Ge+SiC_III/OUT/Ge+SiC_III__4.0.band",
+    lsym    = .true.
+/

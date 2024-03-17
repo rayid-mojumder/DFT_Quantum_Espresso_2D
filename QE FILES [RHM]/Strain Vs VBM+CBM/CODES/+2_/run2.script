@@ -1,0 +1,11 @@
+./pw.x<sic_gec+21.scf.in>sic_gec+21.scf.out &&
+#./pw.x<sic_gec+21.bscf.in>sic_gec+21.bscf.out &&
+./pw.x<sic_gec+22.scf.in>sic_gec+22.scf.out &&
+./pw.x<sic_gec+22.bscf.in>sic_gec+22.bscf.out &&
+./pw.x<sic_gec+23.scf.in>sic_gec+23.scf.out &&
+#./pw.x<sic_gec+23.bscf.in>sic_gec+23.bscf.out &&
+#./pw.x<sic_gec+21.band.in>sic_gec+21.band.out &&
+./pw.x<sic_gec+22.band.in>sic_gec+22.band.out &&
+#./pw.x<sic_gec+23.band.in>sic_gec+23.band.out 
+
+

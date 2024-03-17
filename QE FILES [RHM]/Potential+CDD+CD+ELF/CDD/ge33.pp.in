@@ -1,0 +1,9 @@
+&INPUTPP
+prefix = 'ge33_cdd' 
+outdir = './work/' 
+plot_num = 0
+filplot  = 'ge33_cdd.charge'
+/
+&PLOT
+/
+ 

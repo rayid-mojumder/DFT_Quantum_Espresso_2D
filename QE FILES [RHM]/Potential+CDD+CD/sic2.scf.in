@@ -1,0 +1,40 @@
+
+&CONTROL
+  calculation='scf',
+  outdir='./work1/',
+  prefix='sic2',
+  pseudo_dir='./pseudo/',
+  verbosity='high',
+/
+
+&SYSTEM
+  ibrav=4,
+  a=3.249, 
+  c=25,
+  nat=2,
+  ntyp=2,
+  ecutwfc=40,
+  ecutrho=200,
+  input_dft='pbe',
+  vdw_corr='grimme-d3'
+  smearing='mv',
+  degauss=0.005d0,
+  occupations='smearing', 
+/
+
+&ELECTRONS
+  conv_thr=1d-06,
+  mixing_beta=0.7d0,
+/
+
+ATOMIC_SPECIES
+  C 12.010700d0 C.pbe-n-rrkjus_psl.1.0.0.UPF
+  Si 28.085500d0 Si.pbe-n-rrkjus_psl.1.0.0.UPF
+
+ATOMIC_POSITIONS {angstrom}
+ C    0.0000000000    0.0000000000    10.000000
+Si    0.0000000000    1.8758965080    10.000000
+
+K_POINTS {automatic}
+6 6 1 0 0 0
+

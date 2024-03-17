@@ -1,0 +1,10 @@
+./pw.x<sic_gec1.scf.in>sic_gec1.scf.out &&
+./pw.x<sic_gec2.scf.in>sic_gec2.scf.out &&
+./pw.x<sic_gec3.scf.in>sic_gec3.scf.out &&
+./pp.x<struc-1-VB.pp.in>struc-1-VB.pp.out &&
+./pp.x<struc-1-CB.pp.in>struc-1-CB.pp.out &&
+./pp.x<struc-2-VB.pp.in>struc-2-VB.pp.out &&
+./pp.x<struc-2-CB.pp.in>struc-2-CB.pp.out &&
+./pp.x<struc-3-VB.pp.in>struc-3-VB.pp.out &&
+./pp.x<struc-3-CB.pp.in>struc-3-CB.pp.out
+

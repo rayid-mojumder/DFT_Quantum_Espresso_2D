@@ -1,0 +1,37 @@
+&CONTROL
+  calculation='scf',
+  outdir='./rrr/',
+  prefix='bas',
+  pseudo_dir='./III_V/',
+  verbosity='low',
+/
+
+&SYSTEM
+  ibrav=4,
+  celldm(1)=6.3327, celldm(3)=2.7259060621d0,
+  nat=2,
+  ntyp=2,
+  ecutwfc=30,
+  ecutrho=120,
+  input_dft='lda',
+  occupations='smearing',
+  smearing='mv',
+  degauss=0.005d0,
+/
+
+&ELECTRONS
+  conv_thr=1d-06,
+  mixing_beta=0.7d0,
+/
+
+ATOMIC_SPECIES
+  B 10.811000d0 B.pz-vbc.UPF
+  As 74.9216000d0 As.pz-bhs.UPF
+
+ATOMIC_POSITIONS {crystal}
+   B   0.0000000000d0   0.0000000000d0   0.0000000000d0
+   As   0.3333333333d0   0.6666666667d0   0.0000000000d0
+
+K_POINTS {automatic}
+ 6 6 1 0 0 0
+

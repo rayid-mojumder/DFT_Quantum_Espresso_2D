@@ -1,0 +1,11 @@
+&INPUTPP
+prefix = 'sic44_cdd' 
+outdir = './work/' 
+plot_num = 0
+filplot  = 'sic44_cdd.charge'
+/
+&PLOT
+/
+ 
+ 
+ 

@@ -1,0 +1,5 @@
+./pw.x<zno_sic_1.scf.in>zno_sic_1.scf.out &&
+./pp.x<zno_sic_1.pp.in>zno_sic_1.pp.out &&
+./average.x<zno_sic_1.avg.in>zno_sic_1.avg.out
+
+

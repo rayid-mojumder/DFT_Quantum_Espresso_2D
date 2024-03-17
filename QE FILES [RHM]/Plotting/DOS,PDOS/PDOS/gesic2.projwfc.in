@@ -1,0 +1,5 @@
+&projwfc
+    outdir='./work/'
+    prefix = "gesic2"
+    ngauss = 1
+/

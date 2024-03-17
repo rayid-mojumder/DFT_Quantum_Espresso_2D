@@ -1,0 +1,5 @@
+./pw.x<gesic2.d-nscf.in>gesic2.d-nscf.out &&
+./dos.x<gesic2.dos.in>gesic2.dos.out &&
+./projwfc.x<gesic2.projwfc.in>gesic2.projwfc.out 
+
+ 

@@ -1,0 +1,14 @@
+&inputpp
+/
+&plot
+nfile=3
+filepp(1)='zno_sic_1.charge',
+filepp(2)='zno1.charge',
+filepp(3)='sic1.charge',
+weight(1)=1
+weight(2)=-1
+weight(3)=-1
+iflag=3
+output_format=6
+fileout='zno_sic_1_chargediff.cube'
+/

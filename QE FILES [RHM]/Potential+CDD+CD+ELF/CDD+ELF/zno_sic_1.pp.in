@@ -1,0 +1,11 @@
+&INPUTPP
+prefix = 'zno_sic_1'
+outdir = './work/'
+plot_num = 0
+filplot  = 'zno_sic_1.charge'
+/
+&PLOT
+/
+
+
+

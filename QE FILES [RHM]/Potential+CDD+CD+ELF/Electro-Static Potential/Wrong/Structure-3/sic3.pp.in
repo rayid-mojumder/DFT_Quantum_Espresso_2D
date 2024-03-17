@@ -1,0 +1,9 @@
+&INPUTPP
+  prefix = 'sic3',
+  outdir='./work1/',
+  filplot = 'sic3.charge',
+  plot_num = 11,
+/
+
+&PLOT
+/

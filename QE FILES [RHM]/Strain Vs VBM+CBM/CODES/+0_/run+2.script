@@ -1,0 +1,7 @@
+./pp.x<struc+21-VB.pp.in>struc+21-VB.pp.out && 
+./pp.x<struc+21-CB.pp.in>struc+21-CB.pp.out && 
+./pp.x<struc+22-VB.pp.in>struc+22-VB.pp.out && 
+./pp.x<struc+22-CB.pp.in>struc+22-CB.pp.out && 
+./pp.x<struc+23-VB.pp.in>struc+23-VB.pp.out && 
+./pp.x<struc+23-CB.pp.in>struc+23-CB.pp.out 
+

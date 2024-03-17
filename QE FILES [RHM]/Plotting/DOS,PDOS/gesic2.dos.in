@@ -1,0 +1,5 @@
+&dos
+outdir = './work/',
+prefix='gesic2',
+fildos='gesic2.dos',
+/

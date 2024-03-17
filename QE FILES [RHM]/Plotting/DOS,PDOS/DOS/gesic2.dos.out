@@ -1,0 +1,44 @@
+
+     Program DOS v.6.5 starts on 13Apr2020 at  0:37: 2 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Serial version
+
+     Reading xml data from directory:
+
+     ./work/gesic2.save/
+
+     IMPORTANT: XC functional enforced from input :
+     Exchange-correlation= PBE
+                           (   1   4   3   4   0   0   0)
+     Any further DFT definition will be discarded
+     Please, verify this is what you really want
+
+               file Ge.pbe-mt_fhi.UPF: wavefunction(s)  4d 4f renormalized
+               file C.pbe-mt_fhi.UPF: wavefunction(s)  4f renormalized
+               file Si.pbe-mt_fhi.UPF: wavefunction(s)  4f renormalized
+
+     G-vector sticks info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Sum        4429    4429   1177               388955   388955   53541
+
+
+     Tetrahedra used
+
+
+     DOS          :      5.57s CPU      5.71s WALL
+
+
+   This run was terminated on:   0:37: 8  13Apr2020            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

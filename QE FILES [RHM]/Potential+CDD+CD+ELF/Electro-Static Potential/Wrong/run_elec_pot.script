@@ -1,0 +1,18 @@
+./pw.x<gec1.scf.in>gec1.scf.out &&
+./pw.x<sic1.scf.in>sic1.scf.out &&
+./pw.x<sic_gec1.scf.in>sic_gec1.scf.out &&
+./pw.x<gec2.scf.in>gec2.scf.out &&
+./pw.x<sic2.scf.in>sic2.scf.out &&
+./pw.x<sic_gec2.scf.in>sic_gec2.scf.out &&
+./pw.x<gec3.scf.in>gec3.scf.out &&
+./pw.x<sic3.scf.in>sic3.scf.out &&
+./pw.x<sic_gec3.scf.in>sic_gec3.scf.out &&
+./pp.x<gec1.pp.in>gec1.pp.out &&
+./pp.x<gec2.pp.in>gec2.pp.out &&
+./pp.x<gec3.pp.in>gec3.pp.out &&
+./pp.x<sic1.pp.in>sic1.pp.out &&
+./pp.x<sic2.pp.in>sic2.pp.out &&
+./pp.x<sic3.pp.in>sic3.pp.out &&
+./pp.x<sic_gec1.pp.in>sic_gec1.pp.out &&
+./pp.x<sic_gec2.pp.in>sic_gec2.pp.out &&
+./pp.x<sic_gec3.pp.in>sic_gec3.pp.out 

@@ -1,0 +1,16 @@
+./pw.x<zno1.scf.in>zno1.scf.out &&
+./pw.x<sic1.scf.in>sic1.scf.out &&
+./pw.x<zno_sic_1.scf.in>zno_sic_1.scf.out &&
+./pp.x<zno1.pp.#n>zno1.pp.out &&
+./pp.x<sic1.pp.in>sic1.pp.out &&
+./pp.x<zno_sic_1.pp.in>zno_sic_1.pp.out &&
+./pp.x<zno_sic_1.chargediff.in>zno_sic_1.chargediff.out &&
+./pp.x<zno_sic_1.elf.in>zno_sic_1.elf.out &&
+./pw.x<zno2.scf.in>zno2.scf.out &&
+./pw.x<sic2.scf.in>sic2.scf.out &&
+./pw.x<zno_sic_2.scf.in>zno_sic_2.scf.out &&
+./pp.x<zno2.pp.in>zno2.pp.out &&
+./pp.x<sic2.pp.in>sic2.pp.out &&
+./pp.x<zno_sic_2.pp.in>zno_sic_2.pp.out &&
+./pp.x<zno_sic_2.chargediff.in>zno_sic_2.chargediff.out &&
+./pp.x<zno_sic_2.elf.in>zno_sic_2.elf.out

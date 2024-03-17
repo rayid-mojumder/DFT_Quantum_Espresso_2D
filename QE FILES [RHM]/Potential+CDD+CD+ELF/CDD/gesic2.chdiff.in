@@ -1,0 +1,15 @@
+&inputpp
+/
+&plot
+nfile=3
+filepp(1)='gesic2_cdd.charge', 
+filepp(2)='ge33_cdd.charge', 
+filepp(3)='sic44_cdd.charge', 
+weight(1)=1
+weight(2)=-1
+weight(3)=-1
+iflag=3
+output_format=6
+fileout='gesic2_chargediff.cube'
+/
+ 

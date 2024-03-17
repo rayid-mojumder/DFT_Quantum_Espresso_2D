@@ -1,0 +1,12 @@
+echo "Started Relax Calculation for Ge+SiC_II_"
+
+./pw.x<Ge+SiC_II_2.8.scf.in >Ge+SiC_II_2.8.scf.out;
+echo "Completed >> 2.8 Ang";
+./pw.x<Ge+SiC_II_3.0.scf.in >Ge+SiC_II_3.0.scf.out;
+echo "Completed >> 3.0 Ang";
+./pw.x<Ge+SiC_II_3.2.scf.in >Ge+SiC_II_3.2.scf.out;
+echo "Completed >> 3.2 Ang";
+./pw.x<Ge+SiC_II_3.4.scf.in >Ge+SiC_II_3.4.scf.out;
+echo "Completed >> 3.4 Ang";
+./pw.x<Ge+SiC_II_3.6.scf.in >Ge+SiC_II_3.6.scf.out;
+echo "Completed >> 3.6 Ang";

@@ -1,0 +1,13 @@
+&INPUTPP
+	prefix = 'zno_sic_2_pot'
+	outdir = './work/'
+	plot_num = 11
+	filplot  = 'zno_sic_2.pot'
+/
+&plot
+/
+
+
+
+
+

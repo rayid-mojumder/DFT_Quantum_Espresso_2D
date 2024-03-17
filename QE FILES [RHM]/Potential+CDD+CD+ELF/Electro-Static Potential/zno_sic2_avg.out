@@ -1,0 +1,27 @@
+
+     Program AVERAGE v.7.0 starts on 14Oct2022 at  4:56:53 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Serial multi-threaded version, running on    4 processor cores
+     6263 MiB available memory on the printing compute node when the environment starts
+
+     Reading header from file  zno_sic_2.pot
+     Reading data from file  zno_sic_2.pot
+     Output written to file avg.dat
+
+     AVERAGE      :      2.60s CPU      0.91s WALL
+
+
+   This run was terminated on:   4:56:54  14Oct2022            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

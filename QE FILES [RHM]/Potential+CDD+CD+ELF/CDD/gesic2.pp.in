@@ -1,0 +1,10 @@
+&INPUTPP
+prefix = 'gesic2_cdd' 
+outdir = './work/' 
+plot_num = 0
+filplot  = 'gesic2_cdd.charge'
+/
+&PLOT
+/
+ 
+ 

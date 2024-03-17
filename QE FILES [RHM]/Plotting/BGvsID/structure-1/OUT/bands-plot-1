@@ -1,0 +1,24 @@
+#!/usr/bin/gnuplot -persist
+
+reset
+set term pngcairo
+set output "Ge+SiC_I__4.0.band.png"
+set terminal png enhanced size 500,600   font 'Times-Bold,20'
+
+set label 'Band Gap = 67.9 meV' at 0.6,0.02 font ',15'
+
+set xtics ("M" 0.0000,"K" 0.3333,"{/Symbol G}" 1.0000,"M" 1.5774)  offset 0,-0.1
+
+set arrow from 0.3333,-0.6 to 0.3333,0.6 nohead lt 1 lc 'black' lw 1
+set arrow from 1.0000,-0.6 to 1.0000,0.6 nohead lt 1 lc 'black' lw 1
+set arrow from 0,0 to 1.5774,0 nohead lt 0 lc 'dark-green' lw 2
+
+set yrange [-0.6 : 0.6]
+set ylabel 'Energy E-E_F (eV)' offset 2 # zero character far from yaxis
+
+
+FE=-0.7252
+
+plot "./Ge+SiC_I__4.0.band.gnu" using 1:($2-FE) w l lc 14 lw 3 notitle
+
+

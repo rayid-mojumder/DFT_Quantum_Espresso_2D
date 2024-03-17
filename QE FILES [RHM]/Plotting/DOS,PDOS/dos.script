@@ -1,0 +1,12 @@
+#!/usr/bin/gnuplot -persist
+reset
+set term pngcairo
+set output "gesic2.png"
+set arrow from 0,0 to 4,0 nohead dt "-" lc 0 lw 1.5
+set yrange [-1 : 1]
+set xrange [0 : 4]
+set ylabel 'Energy E-E_F (eV)'
+set xlabel 'States (States/eV)'
+FE=-0.6850
+plot "gesic2.dos" using 2:($1-FE) w l lc 18 lw 2  title 'Struct II'
+ 

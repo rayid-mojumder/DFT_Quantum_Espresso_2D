@@ -1,0 +1,47 @@
+&CONTROL
+  calculation='scf',
+  outdir='./work/',
+  prefix='zno1',
+  pseudo_dir='./pseudo/',
+  verbosity='high',
+/
+&SYSTEM
+  ibrav=4,
+  a = 6.524
+  c =20
+  nat=8,
+  ntyp=2,
+  ecutwfc=30,
+  ecutrho=200,
+  input_dft='pbe',
+  vdw_corr='grimme-d3'
+  occupations='smearing',
+  smearing='mv',
+  degauss=0.005d0,
+/
+
+&ELECTRONS
+  conv_thr=1d-06,
+  mixing_beta=0.7d0,
+/
+
+ATOMIC_SPECIES
+  Zn 65.409000d0 Zn.pbe-dnl-rrkjus_psl.1.0.0.UPF
+  O 15.999400d0 O.pbe-n-rrkjus_psl.1.0.0.UPF
+ 
+
+ATOMIC_POSITIONS {angstrom}
+  Zn   0.0000000000    0.0000000000    13.2000000000
+   O   0.0000000000    1.8833165780    13.2000000000
+  Zn  -1.6310000000    2.8249748670    13.2000000000
+   O  -1.6310000000    4.7082914450    13.2000000000
+  Zn   3.2620000000    0.0000000000    13.2000000000
+   O   3.2620000000    1.8833165780    13.2000000000
+  Zn   1.6310000000    2.8249748670    13.2000000000
+   O   1.6310000000    4.7082914450    13.2000000000
+
+K_POINTS {automatic}
+  6 6 1 0 0 0
+
+
+

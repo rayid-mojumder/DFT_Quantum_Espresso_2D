@@ -1,0 +1,6 @@
+&bands
+outdir  = "./work/",
+prefix  = "sic_gec+23",
+filband = "sic_gec+23.band",
+lsym  = .true.
+/

@@ -1,0 +1,11 @@
+&INPUTPP
+prefix = 'sic2'
+outdir = './work/'
+plot_num = 0
+filplot  = 'sic2.charge'
+/
+&PLOT
+/
+
+
+

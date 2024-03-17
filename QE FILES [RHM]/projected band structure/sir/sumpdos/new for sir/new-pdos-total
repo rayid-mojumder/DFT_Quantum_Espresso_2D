@@ -1,0 +1,1 @@
+./sumpdos.x< "new.pdos_atm#01(C)_wfc#1(s).pdos" "new.pdos_atm#01(C)_wfc#2(p).pdos" "new.pdos_atm#02(Ge)_wfc#1(s).pdos" "new.pdos_atm#02(Ge)_wfc#2(p).pdos" "new.pdos_atm#02(Ge)_wfc#3(d).pdos" "new.pdos_atm#03(Si)_wfc#1(s).pdos" "new.pdos_atm#03(Si)_wfc#2(p).pdos"> gesic.pdos 

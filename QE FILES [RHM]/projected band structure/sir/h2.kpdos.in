@@ -1,0 +1,8 @@
+ &projwfc
+    outdir="./work/"
+    prefix='h2'
+    ngauss=0, degauss=0.006
+    DeltaE=0.01
+    kresolveddos=.true.
+    filpdos='h2.k'
+ /

@@ -1,0 +1,15 @@
+&INPUTPP
+  prefix = 'sic_gec2' ,
+  outdir='./work/',
+  filplot = 'sic_gec2_CB.charge',
+  plot_num = 7,
+  kpoint=1,
+  kband=33,
+/
+
+&PLOT
+	iflag		= 3
+	output_format = 6
+	fileout		= "sic_gec2_CB.cube"
+/
+ 

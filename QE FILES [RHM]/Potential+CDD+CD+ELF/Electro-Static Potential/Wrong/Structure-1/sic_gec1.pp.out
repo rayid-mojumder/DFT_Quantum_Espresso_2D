@@ -1,0 +1,52 @@
+
+     Program POST-PROC v.6.8 starts on  8Aug2021 at  4:20:38 
+
+     This program is part of the open-source Quantum ESPRESSO suite
+     for quantum simulation of materials; please cite
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         "P. Giannozzi et al., J. Phys.:Condens. Matter 29 465901 (2017);
+         "P. Giannozzi et al., J. Chem. Phys. 152 154105 (2020);
+          URL http://www.quantum-espresso.org", 
+     in publications or presentations arising from this work. More details at
+     http://www.quantum-espresso.org/quote
+
+     Serial version
+     1045 MiB available memory on the printing compute node when the environment starts
+
+
+     Reading xml data from directory:
+
+     ./work1/sic_gec1.save/
+
+     IMPORTANT: XC functional enforced from input :
+     Exchange-correlation= PBE
+                           (   1   4   3   4   0   0   0)
+     Any further DFT definition will be discarded
+     Please, verify this is what you really want
+
+
+     G-vector sticks info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Sum         511     421    121                73575    52931    8889
+
+     Using Slab Decomposition
+
+
+     Check: negative core charge=   -0.000010
+
+     negative rho (up, down):  2.114E-04 0.000E+00
+
+     Calling punch_plot, plot_num =  11
+     Writing data to file  sic_gec1.charge
+     Message from routine chdens:
+     output format not set, exiting
+
+     POST-PROC    :      1.09s CPU      1.20s WALL
+
+
+   This run was terminated on:   4:20:39   8Aug2021            
+
+=------------------------------------------------------------------------------=
+   JOB DONE.
+=------------------------------------------------------------------------------=

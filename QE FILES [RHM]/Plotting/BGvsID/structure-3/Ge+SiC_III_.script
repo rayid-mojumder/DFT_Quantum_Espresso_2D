@@ -1,0 +1,31 @@
+#!/bin/sh
+F_PREFIX=Ge+SiC_III_
+D_IN="/home/nano3/Desktop/RAYID/Ge+SiC/Ge+SiC_III"
+D_OUT="/home/nano3/Desktop/RAYID/Ge+SiC/Ge+SiC_III/OUT"
+D_QE="/home/nano3/Desktop/RAYID/qe-6.3/bin"
+NP="-1"
+
+if [ ! -d "$D_OUT" ]; then
+    mkdir $D_OUT
+fi
+
+echo "Started Band vs ID Calculation for Ge+SiC_III_"
+
+$D_QE/pw.x -i $D_IN/Ge+SiC_III__3.2.scf.in > $D_OUT/Ge+SiC_III__3.2.scf.out;
+echo "Completed >> 3.2 Ang";
+$D_QE/pw.x -i $D_IN/Ge+SiC_III__3.2.band_nscf.in > $D_OUT/Ge+SiC_III__3.2.band_nscf.out;
+echo "Completed >> 3.2 Ang band_nscf";
+$D_QE/bands.x -i $D_IN/Ge+SiC_III__3.2.band.in > $D_OUT/Ge+SiC_III__3.2.band.out;
+echo "Completed >> 3.2 Ang band";
+$D_QE/pw.x -i $D_IN/Ge+SiC_III__3.4.scf.in > $D_OUT/Ge+SiC_III__3.4.scf.out;
+echo "Completed >> 3.4 Ang";
+$D_QE/pw.x -i $D_IN/Ge+SiC_III__3.4.band_nscf.in > $D_OUT/Ge+SiC_III__3.4.band_nscf.out;
+echo "Completed >> 3.4 Ang band_nscf";
+$D_QE/bands.x -i $D_IN/Ge+SiC_III__3.4.band.in > $D_OUT/Ge+SiC_III__3.4.band.out;
+echo "Completed >> 3.4 Ang band";
+$D_QE/pw.x -i $D_IN/Ge+SiC_III__3.6.scf.in > $D_OUT/Ge+SiC_III__3.6.scf.out;
+echo "Completed >> 3.6 Ang";
+$D_QE/pw.x -i $D_IN/Ge+SiC_III__3.6.band_nscf.in > $D_OUT/Ge+SiC_III__3.6.band_nscf.out;
+echo "Completed >> 3.6 Ang band_nscf";
+$D_QE/bands.x -i $D_IN/Ge+SiC_III__3.6.band.in > $D_OUT/Ge+SiC_III__3.6.band.out;
+echo "Completed >> 3.6 Ang band";
