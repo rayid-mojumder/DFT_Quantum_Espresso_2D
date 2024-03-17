@@ -1,5 +1,0 @@
-&dos
-   outdir = './work/',
-   prefix='graphene',
-   fildos='graphene.dos',
-/
