@@ -1,0 +1,27 @@
+#!/bin/sh
+F_PREFIX=Si+ZnI2_I
+D_IN="/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_I"
+D_OUT="/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_I/OUT"
+D_QE="/home/nano3/Desktop/SAKIB/qe-6.5/bin"
+NP="4"
+
+if [ ! -d "$D_OUT" ]; then
+    mkdir $D_OUT
+fi
+
+echo "Started Simulation";
+mpirun -np $NP $D_QE/pw.x -i $D_IN/$F_PREFIX.pp_scf.in > $D_OUT/$F_PREFIX.pp_scf.out;
+echo "Si+ZnI2 SCF Completed";
+mpirun -np $NP $D_QE/pp.x -i $D_IN/$F_PREFIX.pp.in > $D_OUT/$F_PREFIX.pp.out;
+echo "Si+ZnI2 PP Completed";
+mpirun -np $NP $D_QE/pw.x -i $D_IN/ZnI2.pp_scf.in > $D_OUT/ZnI2.pp_scf.out;
+echo "ZnI2 SCF Completed";
+mpirun -np $NP $D_QE/pp.x -i $D_IN/ZnI2.pp.in > $D_OUT/ZnI2.pp.out;
+echo "ZnI2 PP Completed";
+mpirun -np $NP $D_QE/pw.x -i $D_IN/Si_I.pp_scf.in > $D_OUT/Si_I.pp_scf.out;
+echo "Si SCF Completed";
+mpirun -np $NP $D_QE/pp.x -i $D_IN/Si_I.pp.in > $D_OUT/Si_I.pp.out;
+echo "Si PP Completed";
+mpirun -np $NP $D_QE/pp.x -i $D_IN/$F_PREFIX.chdiff.in > $D_OUT/$F_PREFIX.chdiff.out;
+echo "ChargeDiff Completed";
+

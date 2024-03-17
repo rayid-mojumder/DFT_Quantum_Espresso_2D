@@ -1,0 +1,351 @@
+#!/bin/bash
+
+NPP=4
+
+#=======================GEN=========================================================
+CRE_GEN=0
+ATOM_POS_GEN="\
+Zn     0.00000000      2.17165659      0.00000000
+Br     0.00000000      0.00000000      1.51007595
+Br     1.88070977      1.08582829     -1.51007595
+Si     0.0000000000    0.0000000000    5.41007595
+Si     0.0000000000    2.1716565840    5.98307595
+"
+#################################################
+CRE_SCF=1
+CRE_BAND_NSCF=1
+CRE_BAND=1
+K_SCF="9  9  1  0 0 0"
+K_BANDS="\
+4
+gG 20
+M  20
+K  20
+gG 20
+"
+#======================RELX=========================================================
+PREFIX="Si+LaBr"
+D_PREF=$PREFIX
+
+A=4.134616409248544
+C=25
+NAT=6
+NTYP=3
+ECUTW=45
+ECUTRHO=250
+
+ATOM_SPE="\
+Br     12.0107     Br_ONCV_PBE_sr.upf
+La     12.0107     La_ONCV_PBE_sr.upf
+Si     12.0107     Si_ONCV_PBE_sr.upf
+"
+DIST=3.43179574
+#################################################
+INCREM=0.1
+BUCKLING=0.573
+#======================NOW_JUST_THE_ATOMIC_POSITIONS================================
+PREFIX_GEN=${PREFIX}_
+D_PREF_GEN=${PREFIX}_
+Z_START_VAL=$(calc $DIST+2.5)
+Z_STOP_VAL=$(calc $DIST+4.0)
+
+
+Z_VAL_1=$Z_START_VAL
+Z_VAL_2=$(calc $Z_START_VAL+$BUCKLING)
+MID_ATOM=$(printf %.10f $(calc 4.0074265411/1.732050808 | tr "~" " ")) #TEMPORARY
+
+D_INN="/home/nano3/Desktop/SAKIB/LST/$D_PREF"
+D_INN_GEN=${D_INN}_
+D_PSEUDO="/home/nano3/Desktop/SAKIB/Pseudo/"
+D_QEE="/home/nano3/Desktop/SAKIB/qe-6.5/bin"
+
+# D_INN="/mnt/h/SAKIB/store/$D_PREF"
+# D_PSEUDO="/mnt/h/SAKIB/pseudo/"
+# D_QEE="/media/sakib_05/G4M35/MaTerials/UbuntuFiles/qe-6.3/bin"
+
+#======================END_OF_INPUT/BUT_ATOMIC_POSITIONS!===========================
+
+if [ ! -d "$PWD/$D_PREF" ]; then
+    mkdir $PWD/$D_PREF
+    mkdir $PWD/$D_PREF/OUT
+fi
+
+
+touch $PWD/$D_PREF/${PREFIX}.script
+cat > $PWD/$D_PREF/${PREFIX}.script << EOF
+#!/bin/sh
+F_PREFIX=${PREFIX}
+D_IN="$D_INN"
+D_OUT="$D_INN/OUT"
+D_QE="$D_QEE"
+NP="$NPP"
+
+if [ ! -d "\$D_OUT" ]; then
+    mkdir \$D_OUT
+fi
+
+echo "Started Relax Calculation for ${PREFIX}"
+
+EOF
+
+#SCF file creation
+for Z_VAL in $(seq $Z_START_VAL $INCREM $Z_STOP_VAL)
+do
+Z_VAL_1=$Z_VAL
+Z_VAL_2=$(calc $Z_VAL+$BUCKLING | awk {'print $1'})
+
+ATOM_POS="\
+La     2.06730851      1.19356079     -1.49542251
+La     4.13461609      2.38712205      1.49542310
+Br     0.00000000      0.00000000      3.43179574
+Br     0.00000000      0.00000000     -3.43179633
+Si     0.0000000000    0.0000000000    $Z_VAL_1
+Si     0.0000000000    $MID_ATOM    $Z_VAL_2
+"
+# YOU CAN COPY FROM HERE
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+
+##################################--STARTING--#########################################
+touch $PWD/$D_PREF/${PREFIX}_$Z_VAL.scf.in
+cat > $PWD/$D_PREF/${PREFIX}_$Z_VAL.scf.in <<EOF
+&CONTROL
+    calculation   = "scf"
+    outdir        = "$D_INN/work/"
+    prefix        = "${PREFIX}_$Z_VAL"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = 'high'
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'smearing'
+    smearing    = 'mp'
+    degauss     =  0.005
+    vdw_corr    = 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS
+K_POINTS {automatic}
+$K_SCF
+
+EOF
+
+Z_VAL_OLD=$(calc $Z_VAL-$INCREM)
+
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+\$D_QE/pw.x -i \$D_IN/${PREFIX}_$Z_VAL.scf.in > \$D_OUT/${PREFIX}_$Z_VAL.scf.out;
+echo "Completed >> $Z_VAL Ang";
+EOF
+else
+cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/${PREFIX}_$Z_VAL.scf.in > \$D_OUT/${PREFIX}_$Z_VAL.scf.out;
+echo "Completed >> $Z_VAL Ang";
+EOF
+fi
+
+# NEW_VAL=\$(grep ! $D_INN/OUT/${PREFIX}_$Z_VAL.scf.out)
+# OLD_VAL=\$(grep ! $D_INN/OUT/${PREFIX}_$Z_VAL_OLD.scf.out)
+# if [[ \$NEW_VAL < \$OLD_VAL ]]; then
+#     exit
+# fi
+
+# EOF
+done
+
+
+if [[ $CRE_GEN -eq 1 ]]; then
+
+if [ ! -d "$PWD/$D_PREF_GEN" ]; then
+    mkdir $PWD/$D_PREF_GEN
+    mkdir $PWD/$D_PREF_GEN/OUT
+fi
+
+##################################--STARTING--#########################################
+#Script file creation
+touch $PWD/$D_PREF_GEN/$PREFIX_GEN.script
+cat > $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+#!/bin/sh
+F_PREFIX=$PREFIX_GEN
+D_IN="$D_INN_GEN"
+D_OUT="$D_INN_GEN/OUT"
+D_QE="$D_QEE"
+NP="$NPP"
+
+if [ ! -d "\$D_OUT" ]; then
+    mkdir \$D_OUT
+fi
+
+echo "Started Simulation";
+EOF
+
+#SCF file creation
+if [ $CRE_SCF == 1 ];then
+touch $PWD/$D_PREF_GEN/$PREFIX_GEN.scf.in
+cat > $PWD/$D_PREF_GEN/$PREFIX_GEN.scf.in <<EOF
+&CONTROL
+    calculation   = "scf"
+    outdir        = "$D_INN_GEN/work/"
+    prefix        = "$PREFIX_GEN"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = 'high'
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'smearing'
+    smearing    = 'mp'
+    degauss     =  0.005
+    vdw_corr    = 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS_GEN
+K_POINTS {automatic}
+$K_SCF
+
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+\$D_QE/pw.x -i \$D_IN/\$F_PREFIX.scf.in > \$D_OUT/\$F_PREFIX.scf.out;
+echo "SCF Completed";
+EOF
+else
+cat >> $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/\$F_PREFIX.scf.in > \$D_OUT/\$F_PREFIX.scf.out;
+echo "SCF Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#Band_nscf file creation
+if [ $CRE_BAND_NSCF == 1 ];then
+touch $PWD/$D_PREF_GEN/$PREFIX_GEN.band_nscf.in
+cat > $PWD/$D_PREF_GEN/$PREFIX_GEN.band_nscf.in <<EOF
+&CONTROL
+    calculation   = "bands"
+    outdir        = "$D_INN_GEN/work/"
+    prefix        = "$PREFIX_GEN"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = "high"
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'smearing'
+    smearing    = 'mp'
+    degauss     =  0.005
+    vdw_corr    = 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS_GEN
+K_POINTS crystal_b
+$K_BANDS
+
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+\$D_QE/pw.x -i \$D_IN/\$F_PREFIX.band_nscf.in > \$D_OUT/\$F_PREFIX.band_nscf.out;
+echo "BAND_NSCF Completed";
+EOF
+else
+cat >> $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/\$F_PREFIX.band_nscf.in > \$D_OUT/\$F_PREFIX.band_nscf.out;
+echo "BAND_NSCF Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#Band file creation
+if [ $CRE_BAND == 1 ];then
+touch $PWD/$D_PREF_GEN/$PREFIX_GEN.band.in
+cat > $PWD/$D_PREF_GEN/$PREFIX_GEN.band.in <<EOF
+&BANDS
+    outdir  = "$D_INN_GEN/work/",
+    prefix  = "$PREFIX_GEN",
+    filband = "$D_INN_GEN/OUT/$PREFIX_GEN.band",
+    lsym    = .true.
+/
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+\$D_QE/bands.x -i \$D_IN/\$F_PREFIX.band.in > \$D_OUT/\$F_PREFIX.band.out;
+echo "BAND Completed";
+EOF
+else
+cat >> $PWD/$D_PREF_GEN/$PREFIX_GEN.script << EOF
+mpirun -np \$NP \$D_QE/bands.x -i \$D_IN/\$F_PREFIX.band.in > \$D_OUT/\$F_PREFIX.band.out;
+echo "BAND Completed";
+EOF
+fi
+fi
+
+########################################################################################
+
+fi
+
+

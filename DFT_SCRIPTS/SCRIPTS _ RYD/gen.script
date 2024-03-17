@@ -1,0 +1,375 @@
+#!/bin/bash
+
+NPP=-1          #use -1 for no mpi
+
+CRE_SCF=1
+CRE_BAND_NSCF=1
+CRE_BAND=1
+CRE_DOS_NSCF=1
+CRE_DOS=0
+CRE_PROJWFC=0
+#CRE_PP=1
+#CRE_PP_SCF=1
+
+PREFIX="InN+SiC_III_3.28"
+D_PREF="InN+SiC_III"
+
+# D_INN="/home/nano3/Desktop/SAKIB/InN+C_2/$D_PREF"
+# D_PSEUDO="/home/drsheraj/Desktop/SAKIB/Pseudo/PAW/"
+# D_QEE="/home/nano3/Desktop/SAKIB/qe-6.3_2/bin/"
+
+D_INN="/media/sakib05/D/MaTerials/WS/My_Rig_3/$D_PREF"
+D_PSEUDO="/media/sakib05/D/MaTerials/UbuntuFiles/Pseudo/ONCVPSP"
+D_QEE="/media/sakib05/D/MaTerials/Deb/qe-6.5/bin"
+# D_QEE="/media/sakib_05/D/MaTerials/zSETUP_Files/Linux_Files/q3_no_para/bin"
+
+if [ ! -d "$PWD/$D_PREF" ]; then
+    mkdir $PWD/$D_PREF
+    mkdir $PWD/$D_PREF/OUT
+fi
+
+A=10.89
+C=25
+NAT=50
+NTYP=4
+ECUTW=45
+ECUTRHO=250
+
+
+ATOM_SPE="\
+C      12.0107     C_ONCV_PBE_sr.upf
+Si     28.0855     Si_ONCV_PBE_sr.upf
+N      14.00674    N_ONCV_PBE_sr.upf
+In     114.81800   In_ONCV_PBE_sr.upf
+"
+ATOM_POS="\
+In    0.0000000000    0.0000000000    0.0000000000
+N     0.0000000000    2.0957814770    0.0000000000
+In   -1.8150000000    3.1436722160    0.0000000000
+N    -1.8150000000    5.2394536930    0.0000000000
+In   -3.6300000000    6.2873444320    0.0000000000
+N    -3.6300000000    8.3831259090    0.0000000000
+In    3.6300000000    0.0000000000    0.0000000000
+N     3.6300000000    2.0957814770    0.0000000000
+In    1.8150000000    3.1436722160    0.0000000000
+N     1.8150000000    5.2394536930    0.0000000000
+In    0.0000000000    6.2873444320    0.0000000000
+N     0.0000000000    8.3831259090    0.0000000000
+In    7.2600000000    0.0000000000    0.0000000000
+N     7.2600000000    2.0957814770    0.0000000000
+In    5.4450000000    3.1436722160    0.0000000000
+N     5.4450000000    5.2394536930    0.0000000000
+In    3.6300000000    6.2873444320    0.0000000000
+N     3.6300000000    8.3831259090    0.0000000000
+C     0.4537500000    0.2619726850    3.28
+Si    0.4537500000    1.8338087930    3.28
+C    -0.9075000000    2.6197268470    3.28
+Si   -0.9075000000    4.1915629550    3.28
+C    -2.2687500000    4.9774810090    3.28
+Si   -2.2687500000    6.5493171170    3.28
+C    -3.6300000000    7.3352351710    3.28
+Si   -3.6300000000    8.9070712790    3.28
+C     3.1762500000    0.2619726850    3.28
+Si    3.1762500000    1.8338087930    3.28
+C     1.8150000000    2.6197268470    3.28
+Si    1.8150000000    4.1915629550    3.28
+C     0.4537500000    4.9774810090    3.28
+Si    0.4537500000    6.5493171170    3.28
+C    -0.9075000000    7.3352351710    3.28
+Si   -0.9075000000    8.9070712790    3.28
+C     5.8987500000    0.2619726850    3.28
+Si    5.8987500000    1.8338087930    3.28
+C     4.5375000000    2.6197268470    3.28
+Si    4.5375000000    4.1915629550    3.28
+C     3.1762500000    4.9774810090    3.28
+Si    3.1762500000    6.5493171170    3.28
+C     1.8150000000    7.3352351710    3.28
+Si    1.8150000000    8.9070712790    3.28
+C     8.6212500000    0.2619726850    3.28
+Si    8.6212500000    1.8338087930    3.28
+C     7.2600000000    2.6197268470    3.28
+Si    7.2600000000    4.1915629550    3.28
+C     5.8987500000    4.9774810090    3.28
+Si    5.8987500000    6.5493171170    3.28
+C     4.5375000000    7.3352351710    3.28
+Si    4.5375000000    8.9070712790    3.28
+"
+K_SCF="8  8  1  0 0 0"
+K_BANDS="\
+4
+M  20
+gG 20
+K  20
+M  20
+"
+K_DOS="24  24  1  0 0 0"
+NGAUSS=-1           #PDOS
+
+##################################--STARTING--#########################################
+#Script file creation
+touch $PWD/$D_PREF/$PREFIX.script
+cat > $PWD/$D_PREF/$PREFIX.script << EOF
+#!/bin/sh
+F_PREFIX=$PREFIX
+D_IN="$D_INN"
+D_OUT="$D_INN/OUT"
+D_QE="$D_QEE"
+NP="$NPP"
+
+if [ ! -d "\$D_OUT" ]; then
+    mkdir \$D_OUT
+fi
+
+echo "Started Simulation";
+EOF
+
+#SCF file creation
+if [ $CRE_SCF == 1 ];then
+touch $PWD/$D_PREF/$PREFIX.scf.in
+cat > $PWD/$D_PREF/$PREFIX.scf.in <<EOF
+&CONTROL
+    calculation   = "scf"
+    outdir        = "$D_INN/work/"
+    prefix        = "$PREFIX"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = 'high'
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'smearing'
+    smearing    = 'gaussian'
+    degauss     =  0.005
+    vdw_corr	= 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS
+K_POINTS {automatic}
+$K_SCF
+
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+\$D_QE/pw.x -i \$D_IN/\$F_PREFIX.scf.in > \$D_OUT/\$F_PREFIX.scf.out;
+echo "SCF Completed";
+EOF
+else
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/\$F_PREFIX.scf.in > \$D_OUT/\$F_PREFIX.scf.out;
+echo "SCF Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#Band_nscf file creation
+if [ $CRE_BAND_NSCF == 1 ];then
+touch $PWD/$D_PREF/$PREFIX.band_nscf.in
+cat > $PWD/$D_PREF/$PREFIX.band_nscf.in <<EOF
+&CONTROL
+    calculation   = "bands"
+    outdir        = "$D_INN/work/"
+    prefix        = "$PREFIX"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = "high"
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'smearing'
+    smearing    = 'gaussian'
+    degauss     =  0.005
+    vdw_corr	= 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS
+K_POINTS crystal_b
+$K_BANDS
+
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+\$D_QE/pw.x -i \$D_IN/\$F_PREFIX.band_nscf.in > \$D_OUT/\$F_PREFIX.band_nscf.out;
+echo "BAND_NSCF Completed";
+EOF
+else
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/\$F_PREFIX.band_nscf.in > \$D_OUT/\$F_PREFIX.band_nscf.out;
+echo "BAND_NSCF Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#Band file creation
+if [ $CRE_BAND == 1 ];then
+touch $PWD/$D_PREF/$PREFIX.band.in
+cat > $PWD/$D_PREF/$PREFIX.band.in <<EOF
+&BANDS
+    outdir	= "$D_INN/work/",
+    prefix	= "$PREFIX",
+    filband	= "$D_INN/OUT/$PREFIX.band",
+    lsym	= .true.
+/
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+\$D_QE/bands.x -i \$D_IN/\$F_PREFIX.band.in > \$D_OUT/\$F_PREFIX.band.out;
+echo "BAND Completed";
+EOF
+else
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+mpirun -np \$NP \$D_QE/bands.x -i \$D_IN/\$F_PREFIX.band.in > \$D_OUT/\$F_PREFIX.band.out;
+echo "BAND Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#DOS_nscf file creation
+if [ $CRE_DOS_NSCF == 1 ];then
+touch $PWD/$D_PREF/$PREFIX.dos_nscf.in
+cat > $PWD/$D_PREF/$PREFIX.dos_nscf.in <<EOF
+&CONTROL
+    calculation   = "nscf"
+    outdir        = "$D_INN/work/"
+    prefix        = "$PREFIX"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = "high"
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'tetrahedra'
+    vdw_corr	= 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS
+K_POINTS {automatic}
+$K_DOS
+
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+\$D_QE/pw.x -i \$D_IN/\$F_PREFIX.dos_nscf.in > \$D_OUT/\$F_PREFIX.dos_nscf.out;
+echo "DOS_NSCF Completed";
+EOF
+else
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/\$F_PREFIX.dos_nscf.in > \$D_OUT/\$F_PREFIX.dos_nscf.out;
+echo "DOS_NSCF Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#DOS file creation
+if [ $CRE_DOS == 1 ];then
+touch $PWD/$D_PREF/$PREFIX.dos.in
+cat > $PWD/$D_PREF/$PREFIX.dos.in <<EOF
+&DOS
+    outdir = "$D_INN/work/"
+    prefix = "$PREFIX"
+    fildos = "$D_INN/OUT/$PREFIX.dos"
+/
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+\$D_QE/dos.x -i \$D_IN/\$F_PREFIX.dos.in > \$D_OUT/\$F_PREFIX.dos.out;
+echo "DOS Completed";
+EOF
+else
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+mpirun -np \$NP \$D_QE/dos.x -i \$D_IN/\$F_PREFIX.dos.in > \$D_OUT/\$F_PREFIX.dos.out;
+echo "DOS Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#PROJWFC file creation
+if [ $CRE_PROJWFC == 1 ];then
+touch $PWD/$D_PREF/$PREFIX.projwfc.in
+cat > $PWD/$D_PREF/$PREFIX.projwfc.in <<EOF
+&PROJWFC
+    outdir = "$D_INN/work/"
+    prefix = "$PREFIX"
+    ngauss = $NGAUSS
+    filpdos = "$D_INN/OUT/$PREFIX"
+/
+EOF
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+\$D_QE/projwfc.x -i \$D_IN/\$F_PREFIX.projwfc.in > \$D_OUT/\$F_PREFIX.projwfc.out;
+echo "PDOS Completed";
+EOF
+else
+cat >> $PWD/$D_PREF/$PREFIX.script << EOF
+mpirun -np \$NP \$D_QE/projwfc.x -i \$D_IN/\$F_PREFIX.projwfc.in > \$D_OUT/\$F_PREFIX.projwfc.out;
+echo "PDOS Completed";
+EOF
+fi
+fi
+
+########################################################################################
+#PP_scf_1 file creation
+
+
+########################################################################################
+#PP_scf_2 file creation
+
+
+########################################################################################
+#PP file creation
+
+
+###################################--THE_END--##########################################
+

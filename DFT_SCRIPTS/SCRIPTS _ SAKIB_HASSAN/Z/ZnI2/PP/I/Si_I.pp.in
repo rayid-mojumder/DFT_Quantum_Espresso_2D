@@ -1,0 +1,11 @@
+&INPUTPP
+	prefix 		= "Si_I_pp"
+	outdir 		= "/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_I/work/"
+	plot_num 	= 0
+	filplot  	= "/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_I/OUT/Si_I.charge"
+/
+&PLOT
+	iflag		= 3
+	output_format = 6
+	fileout		= "/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_I/OUT/Si_I.cube"
+/

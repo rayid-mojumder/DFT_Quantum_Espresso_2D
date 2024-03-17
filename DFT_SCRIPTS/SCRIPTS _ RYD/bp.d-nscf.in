@@ -1,0 +1,38 @@
+
+&CONTROL
+  calculation='nscf',
+  outdir='./media/rhm/DOCUMENTS/qe-simulation/qe-7.0/bin/work/',
+  prefix='bp',
+  pseudo_dir='./media/rhm/DOCUMENTS/qe-simulation/qe-7.0/bin/pseudo/',
+  verbosity='high',
+/
+
+&SYSTEM
+  ibrav=4,
+  celldm(1)=6.011, celldm(3)=2.7259060621d0,
+  nat=2,
+  ntyp=2,
+  ecutwfc=30,
+  ecutrho=120,
+  input_dft='lda',
+  occupations='smearing',
+  smearing='mv',
+  degauss=0.005d0,
+/
+
+&ELECTRONS
+  conv_thr=1d-06,
+  mixing_beta=0.7d0,
+/
+
+ATOMIC_SPECIES
+  B 10.811000d0 B.pz-n-rrkjus_psl.0.1.UPF
+  P 30.973800d0 P.pz-n-rrkjus_psl.0.1.UPF
+
+ATOMIC_POSITIONS {crystal}
+   B   0.0000000000d0   0.0000000000d0   0.0000000000d0
+   P   0.3333333333d0   0.6666666667d0   0.0000000000d0
+
+K_POINTS {automatic}
+ 6 6 1 0 0 0
+

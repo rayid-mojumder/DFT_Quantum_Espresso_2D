@@ -1,0 +1,158 @@
+#!/bin/bash
+
+NPP=-1
+
+PREFIX="MoSSe+GaN_"
+D_PREF="MoSSe+GaN_"
+Z_START_VAL=6.55
+Z_STOP_VAL=6.65
+INCREM=0.01
+BUCKLING=0.0
+
+A=3.23
+C=25
+NAT=5
+NTYP=5
+ECUTW=50
+ECUTRHO=350
+
+ATOM_SPE="\
+Ga     12.0107     Ga.pbe-dnl-kjpaw_psl.1.0.0.UPF
+N      12.0107     N.pbe-n-kjpaw_psl.1.0.0.UPF
+Mo     12.0107     Mo.pbe-dn-kjpaw_psl.1.0.0.UPF
+S      12.0107     S.pbe-nl-kjpaw_psl.1.0.0.UPF
+Se     12.0107     Se.pbe-n-kjpaw_psl.1.0.0.UPF
+"
+
+Z_VAL_1=$Z_START_VAL
+Z_VAL_2=$(calc $Z_START_VAL+$BUCKLING)
+
+D_INN="/media/sakib05/D/MaTerials/WS/My_Rig_Pie/$D_PREF"
+D_PSEUDO="/media/sakib05/D/MaTerials/UbuntuFiles/Pseudo/PAW"
+D_QEE="/media/sakib05/D/MaTerials/Deb/qe-6.5/bin"
+
+# D_INN="/home/nano3/Desktop/SAKIB/LST/$D_PREF"
+# D_PSEUDO="/home/nano3/Desktop/SAKIB/Pseudo/"
+# D_QEE="/home/nano3/Desktop/SAKIB/qe-6.5/bin"
+
+# D_INN="/mnt/h/SAKIB/store/$D_PREF"
+# D_PSEUDO="/mnt/h/SAKIB/pseudo/"
+# D_QEE="/media/sakib_05/G4M35/MaTerials/UbuntuFiles/qe-6.3/bin"
+
+if [ ! -d "$PWD/$D_PREF" ]; then
+    mkdir $PWD/$D_PREF
+    mkdir $PWD/$D_PREF/OUT
+fi
+
+touch $PWD/$D_PREF/${PREFIX}.script
+cat > $PWD/$D_PREF/${PREFIX}.script << EOF
+#!/bin/sh
+F_PREFIX=${PREFIX}
+D_IN="$D_INN"
+D_OUT="$D_INN/OUT"
+D_QE="$D_QEE"
+NP="$NPP"
+
+if [ ! -d "\$D_OUT" ]; then
+    mkdir \$D_OUT
+fi
+
+echo "Started Relax Calculation for ${PREFIX}"
+
+EOF
+
+#SCF file creation
+for Z_VAL in $(seq $Z_START_VAL $INCREM $Z_STOP_VAL)
+do
+Z_VAL_1=$Z_VAL
+Z_VAL_2=$(calc $Z_VAL+$BUCKLING | awk {'print $1'})
+
+ATOM_POS="\
+Se     0.0000000000    1.8648413690    0.0000000000
+Mo     0.0000000000    0.0000000000    1.7100000000
+S      0.0000000000    1.8648413690    3.2500000000
+Ga     0.0000000000    0.0000000000    $Z_VAL_1
+N      0.0000000000    1.8648413690    $Z_VAL_1
+"
+# YOU CAN COPY FROM HERE
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+#   $Z_VAL_1
+#   $Z_VAL_2
+
+##################################--STARTING--#########################################
+touch $PWD/$D_PREF/${PREFIX}_$Z_VAL.scf.in
+cat > $PWD/$D_PREF/${PREFIX}_$Z_VAL.scf.in <<EOF
+&CONTROL
+    calculation   = "scf"
+    outdir        = "$D_INN/work/"
+    prefix        = "${PREFIX}_$Z_VAL"
+    pseudo_dir    = "$D_PSEUDO"
+    restart_mode  = "from_scratch"
+    verbosity     = 'high'
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  $A
+    c           =  $C
+    nat         =  $NAT
+    ntyp        =  $NTYP
+    input_dft   = 'PBE'
+    ecutwfc     =  $ECUTW
+    ecutrho     =  $ECUTRHO
+    occupations = 'smearing'
+    smearing    = 'mp'
+    degauss     =  0.005
+    vdw_corr    = 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+$ATOM_SPE
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS
+K_POINTS {automatic}
+9  9  1  0 0 0
+
+EOF
+
+Z_VAL_OLD=$(calc $Z_VAL-$INCREM)
+
+if [ $NPP == -1 ];then
+cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+\$D_QE/pw.x -i \$D_IN/${PREFIX}_$Z_VAL.scf.in > \$D_OUT/${PREFIX}_$Z_VAL.scf.out;
+echo "Completed >> $Z_VAL Ang";
+EOF
+else
+cat >> $PWD/$D_PREF/${PREFIX}.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/${PREFIX}_$Z_VAL.scf.in > \$D_OUT/${PREFIX}_$Z_VAL.scf.out;
+echo "Completed >> $Z_VAL Ang";
+EOF
+fi
+
+# NEW_VAL=\$(grep ! $D_INN/OUT/${PREFIX}_$Z_VAL.scf.out)
+# OLD_VAL=\$(grep ! $D_INN/OUT/${PREFIX}_$Z_VAL_OLD.scf.out)
+# if [[ \$NEW_VAL < \$OLD_VAL ]]; then
+#     exit
+# fi
+
+# EOF
+done
+

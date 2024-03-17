@@ -1,0 +1,90 @@
+#!/bin/bash
+
+NPP=2
+
+PREFIX="SiC_Unit_ECUT"
+D_PREF="SiC_Unit_ECUT"
+Z_START_VAL=20
+Z_STOP_VAL=60
+INCREM=1
+Z_VAL=$Z_START_VAL
+D_INN="/media/sakib_05/G4M35/MaTerials/WS/SCF_KP_T/$D_PREF"
+D_QEE="/media/sakib_05/G4M35/MaTerials/UbuntuFiles/qe-6.3/bin"
+
+if [ ! -d "$PWD/$D_PREF" ]; then
+    mkdir $PWD/$D_PREF
+fi
+
+touch $PWD/$D_PREF/$PREFIX\_ECUT.script
+cat > $PWD/$D_PREF/$PREFIX\_ECUT.script << EOF
+#!/bin/sh
+F_PREFIX=$PREFIX
+D_IN="$D_INN"
+D_OUT="$D_INN/OUT"
+D_QE="$D_QEE"
+NP="$NPP"
+
+if [ ! -d "\$D_OUT" ]; then
+    mkdir \$D_OUT
+fi
+
+echo "Started ECUT Test";
+EOF
+
+#SCF file creation
+for Z_VAL in $(seq $Z_START_VAL $INCREM $Z_STOP_VAL)
+do
+ATOM_POS="\
+Si    0.0000000000    0.0000000000    0.0000000000
+C     0.0000000000    1.6766251820    0.0000000000
+"
+
+##################################--STARTING--#########################################
+touch $PWD/$D_PREF/$PREFIX$Z_VAL.scf.in
+cat > $PWD/$D_PREF/$PREFIX$Z_VAL.scf.in <<EOF
+&CONTROL
+    calculation   = "scf"
+    outdir        = "$D_INN/work/"
+    prefix        = "$PREFIX$Z_VAL"
+    pseudo_dir    = "/media/sakib_05/G4M35/MaTerials/UbuntuFiles/Pseudo/ONCVPSP/"
+    restart_mode  = "from_scratch"
+    verbosity     = 'high'
+/
+
+&SYSTEM
+    ibrav       =  4
+    a           =  2.904
+    c           =  25
+    nat         =  2
+    ntyp        =  2
+    input_dft   = 'PBE'
+    ecutwfc     =  $Z_VAL
+    ecutrho     =  400
+    occupations = 'smearing'
+    smearing    = 'mp'
+    degauss     =  0.005
+    vdw_corr    = 'DFT-D'
+/
+
+&ELECTRONS
+    conv_thr         =  1.00000e-8
+    mixing_beta      =  0.7
+/
+
+ATOMIC_SPECIES
+C     12.0107     C_ONCV_PBE_sr.upf
+Si    28.0855     Si_ONCV_PBE_sr.upf
+
+ATOMIC_POSITIONS (angstrom)
+$ATOM_POS
+K_POINTS {automatic}
+8  8  1  0 0 0
+
+EOF
+
+cat >> $PWD/$D_PREF/$PREFIX\_ECUT.script << EOF
+mpirun -np \$NP \$D_QE/pw.x -i \$D_IN/$PREFIX$Z_VAL.scf.in > \$D_OUT/$PREFIX$Z_VAL.scf.out;
+echo "Completed >> $Z_VAL Ry";
+EOF
+
+done

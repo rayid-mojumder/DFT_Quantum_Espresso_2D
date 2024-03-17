@@ -1,0 +1,14 @@
+&INPUTPP
+/
+&PLOT
+	nfile		= 3
+	filepp(1)	= '/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_II/OUT/Si+ZnI2_II.charge', 
+	filepp(2)	= '/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_I/OUT/ZnI2.charge', 
+	filepp(3)	= '/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_II/OUT/Si_II.charge', 
+	weight(1)	= 1
+	weight(2)	=-1
+	weight(3)	=-1
+	iflag		= 3
+	output_format= 6
+	fileout		= '/home/nano3/Desktop/SAKIB/LST2/Si+ZnI2_II/OUT/Si+ZnI2_II_chargediff.cube'
+/

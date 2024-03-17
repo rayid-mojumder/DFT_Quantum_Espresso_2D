@@ -1,0 +1,50 @@
+#!/bin/bash
+#======================SWITCHES=====================================================
+
+#======================INPUT SIDE(FILES)============================================
+HETERO_PREFIX="Si+ZnI2_I_rlx_"
+LAYER1_PREFIX="Si_unit_for_ZnI2"
+LAYER2_PREFIX="ZnI2_unit"
+NO_OF_ATOMS_TO_DIVIDE_BY=2
+
+# 1angs = 1.889725989 bohr
+#======================INPUT SIDE(PLOT)=============================================
+X_LABEL="Interlayer distance (A)"
+Y_LABEL="Binding energy per C atom (meV)"
+LEGEND="Structure I"
+L_COLOR="blue"
+
+#======================PROGRAM SIDE=================================================
+HETERO_FILE_NAMES=($(ls | grep -w "scf.out" | grep -wv "$LAYER1_PREFIX" | grep -wv "$LAYER2_PREFIX"))
+
+L1_ENG=$(grep "!" $LAYER1_PREFIX.scf.out | awk {'print $5'})
+L2_ENG=$(grep "!" $LAYER2_PREFIX.scf.out | awk {'print $5'})
+touch $PWD/Binding_Energy-$HETERO_PREFIX.gnu
+cat > $PWD/Binding_Energy-$HETERO_PREFIX.gnu << EOF
+#BindingEnergy
+EOF
+for (( i = 0; i < ${#HETERO_FILE_NAMES[*]}; i++ )); do
+	DIST[i]=$(printf %.4f $(calc $(grep "celldm(1)" ${HETERO_FILE_NAMES[i]} | awk {'print $2'})*$(grep "celldm(1)" ${HETERO_FILE_NAMES[i]} | awk {'print $6'})/1.889725*$(grep -B 2 "number of k points=" ${HETERO_FILE_NAMES[i]} | grep "tau(  $(grep "number of atoms/cell" ${HETERO_FILE_NAMES[i]} | awk {'print $5'}))" | awk {'print $9'})| tr "~" "\0"))
+	
+	H_ENG[i]=$(grep "!" ${HETERO_FILE_NAMES[i]} | awk {'print $5'} | tr "-" " ")
+	BND_ENG[i]=$(calc $(calc $(calc ${H_ENG[i]} + $L1_ENG + $L2_ENG)*13605.662285137) / $NO_OF_ATOMS_TO_DIVIDE_BY *-1 | tr "~" "\0")
+	cat >> $PWD/Binding_Energy-$HETERO_PREFIX.gnu <<EOF
+${DIST[i]}		${BND_ENG[i]}
+EOF
+done
+
+#======================GNUPLOT SIDE=================================================
+touch $PWD/Plot_bind_$PREFIX.script
+cat > $PWD/Plot_bind_$PREFIX.script <<EOF
+#!/usr/bin/gnuplot -persist
+
+set xlabel '$X_LABEL'
+set ylabel '$Y_LABEL'
+
+plot "$PWD/Binding_Energy-$HETERO_PREFIX.gnu" w lp lw 2 lc '$L_COLOR' smooth cspline title '$LEGEND', "$PWD/Binding_Energy-$HETERO_PREFIX.gnu" w p lw 2 pt 7 ps 1.2 lc '$L_COLOR' notitle,
+
+EOF
+
+./Plot_bind_$PREFIX.script
+
+#===================================THE_END=========================================
